@@ -34,4 +34,4 @@ National Meteorological Center of CMA
 College of Earth and Planetary Sciences, UCAS
 
 
-Special thanks to my teacher Dong Li @IAP
+Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
