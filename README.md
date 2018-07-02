@@ -25,3 +25,11 @@ Z : Geopotential Height in m^2/s^2
 
 
 The output file name is "output.nc", you can plot the fields rapidly by using Panoply,ncview,ncbrowse and so on.
+
+Special thanks to Dong Li @IAP
+
+Zhou Lilong
+
+National Meteorological Center of CMA
+
+College of Earth and Planetary Sciences, UCAS
