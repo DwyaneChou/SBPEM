@@ -79,7 +79,7 @@ hOnV(:,ny_v)      = mean(h(:,ny_z));
 U                 = hOnU.*u;
 V                 = hOnV.*v;
 
-total_energy0     = sum(sum(U.*U))+sum(sum(V.*V))+sum(sum(h.*h));
+total_energy0     = sum(sum(U.*U.*cos(lat_u)))+sum(sum(V.*V.*cos(lat_v)))+sum(sum(Z.*Z.*cos(lat_z)));
 total_mass0       = sum(sum(Z.*cos(lat_z)));
 
 % Compute the coefficient for L operator
@@ -119,7 +119,7 @@ for nt = 1:int_step_num
                       lon_u,lon_v,lon_z,lat_u,lat_v,lat_z,...
                       nx_u,ny_u,nx_v,ny_v,nx_z,ny_z)
                   
-        total_energy       = sum(sum(U.*U))+sum(sum(V.*V))+sum(sum(h.*h));
+        total_energy       = sum(sum(U.*U.*cos(lat_u)))+sum(sum(V.*V.*cos(lat_v)))+sum(sum(Z.*Z.*cos(lat_z)));
         total_mass         = sum(sum(Z.*cos(lat_z)));
         energy_change_rate = (total_energy-total_energy0)/total_energy0; %ECR
         mass_change_rate   = (total_mass-total_mass0)/total_mass0;       %MCR
