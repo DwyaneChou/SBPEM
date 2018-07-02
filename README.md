@@ -12,14 +12,14 @@ L_operator       : Inversly Symmetric Operator
 
 B_operator       : Harmoniously Diffusive Operator
 
-Time Integration : Variable time step square conservation integral scheme
+Time Integration : Square conservation integral scheme with variable time step
 
 
-There is a Rossby-Haurwitz wave as initial condition for test case, also you can use a 500hPa u,v,Z to run this model.
+There is a Rossby-Haurwitz wave as initial condition for test-case, also you can use the 500hPa u,v,Z to run this model.
 
 u : u component wind speed in m/s
 
-v : u component wind speed in m/s
+v : v component wind speed in m/s
 
 Z : Geopotential Height in m^2/s^2
 
