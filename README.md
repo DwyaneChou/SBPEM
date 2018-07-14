@@ -7,7 +7,7 @@ Main Characteristics
 
 Equations        : IAP transformation
 
-L_operator       : Inversly Symmetric Operator
+L_operator       : Antisymmetry Operator
 
 B_operator       : Harmoniously Diffusive Operator
 
