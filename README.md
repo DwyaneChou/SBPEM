@@ -13,6 +13,18 @@ B_operator       : Harmoniously Diffusive Operator
 
 Time Integration : Square conservation integral scheme with variable time step
 
+Integral Scheme  :
+
+1. HDO(harmonious diffusion operator)
+
+2. A improved 4th order Runge-Kuuta
+
+3. Predict Correct
+
+4. leap frog
+
+Split Scheme     : CSP2(2nd order Conservative Splitting Pattern)
+
 
 There is a Rossby-Haurwitz wave as initial condition for test-case, also you can use the 500hPa u,v,Z to run this model.
 

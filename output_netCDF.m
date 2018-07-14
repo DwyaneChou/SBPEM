@@ -17,14 +17,14 @@ dtheta  = dtheta*r2d;
 
 % Inverse IAP transformation
 h                 = sqrt(Z);
-him1(2:nx_z  ,:)  = h(1:nx_z-1,:);
-him1(1       ,:)  = h(nx_z,:);
-hjm1(:,2:ny_z  )  = h(:,1:ny_z-1);
-hjm1(:,1       )  = mean(h(:,1));
+hip1(1:nx_z-1,:)  = h(2:nx_z,:);
+hip1(nx_z    ,:)  = h(1,:);
+hjp1(:,1:ny_z-1)  = h(:,2:ny_z);
+hjp1(:,ny_z    )  = 0;
 
-hOnU              = 0.5*(h+him1); % h on u grid
-hOnV              = 0.5*(h+hjm1); % h on v grid
-hOnV(:,ny_v)      = mean(h(:,ny_z));
+hOnU              = 0.5*(h+hip1); % h on u grid
+hOnV_temp         = 0.5*(h+hjp1); % h on v grid
+hOnV              = hOnV_temp(:,1:ny_v);
 
 u                 = U./hOnU;
 v                 = V./hOnV;
@@ -97,10 +97,10 @@ if output_num==0
     netcdf.putVar(ncid, XLONG_V_id ,lon_v);
     netcdf.putVar(ncid, XLAT_V_id  ,lat_v);
     netcdf.putVar(ncid, XLONG_M_id ,lon_z);
-    netcdf.putVar(ncid, XLAT_M_id ,lat_z);
-    netcdf.putVar(ncid, U_id     ,[0,0,0],[west_east,south_north,1]     ,u);
-    netcdf.putVar(ncid, V_id     ,[0,0,0],[west_east,south_north_stag,1],v);
-    netcdf.putVar(ncid, Z_id     ,[0,0,0],[west_east,south_north,1]     ,Z);
+    netcdf.putVar(ncid, XLAT_M_id  ,lat_z);
+    netcdf.putVar(ncid, U_id       ,[0,0,0],[west_east,south_north,1]     ,u);
+    netcdf.putVar(ncid, V_id       ,[0,0,0],[west_east,south_north_stag,1],v);
+    netcdf.putVar(ncid, Z_id       ,[0,0,0],[west_east,south_north,1]     ,Z);
     
     netcdf.close(ncid)
     
