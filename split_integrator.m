@@ -1,61 +1,40 @@
-function [tau_n,U_np1,V_np1,Z_np1,LU,LV,LZ] = split_integrator(split_scheme,split_num,IntSch,nt,fast_dt,slow_dt,...
-                                                               U_nm1,V_nm1,Z_nm1,LU_nm1,LV_nm1,LZ_nm1,...
-                                                               U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                                                               nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                                               coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y)
+function [tau_n,U,V,Z,LU,LV,LZ] = split_integrator(MESH,STATE,STATE_old,TEND_old,Split,IntSch)
 
 fast_pass = 1;
 slow_pass = 2;
 
-if split_scheme == 1
+if Split.split_scheme == 1
     
-    dt = 0.5*slow_dt;
-    [~,U,V,Z,LU,LV,LZ] = integrator(slow_pass,dt,IntSch,nt,...
-                                    U_nm1,V_nm1,Z_nm1,LU_nm1,LV_nm1,LZ_nm1,...
-                                    U,V,Z,dlambda,dtheta,a,Omega,g,...
-                                    lat_u,lat_v,lat_z,...
-                                    nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                    coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+    dt = Split.slow_dt;
+    [~,STATE.U,STATE.V,STATE.Z,...
+       TEND.LU,TEND.LV,TEND.LZ] = integrator(slow_pass,MESH,STATE,STATE_old,TEND_old,IntSch,dt);
     
-    for i = 1:split_num
+    for i = 1:Split.split_num
         if IntSch == 4
-            U_nm1  = U;
-            V_nm1  = V;
-            Z_nm1  = Z;
-            LU_nm1 = LU;
-            LV_nm1 = LV;
-            LZ_nm1 = LZ;
+            STATE_old.U  = STATE.U;
+            STATE_old.V  = STATE.V;
+            STATE_old.Z  = STATE.Z;
+            TEND_old.LU  = TEND.LU;
+            TEND_old.LV  = TEND.LV;
+            TEND_old.LZ  = TEND.LZ;
         end
         
-        dt = fast_dt;
-        [~,U,V,Z,LU,LV,LZ] = integrator(fast_pass,dt,IntSch,nt,...
-                                        U_nm1,V_nm1,Z_nm1,LU_nm1,LV_nm1,LZ_nm1,...
-                                        U,V,Z,dlambda,dtheta,a,Omega,g,...
-                                        lat_u,lat_v,lat_z,...
-                                        nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                        coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+        dt = Split.fast_dt;
+        [~,STATE.U,STATE.V,STATE.Z,...
+           TEND.LU,TEND.LV,TEND.LZ] = integrator(fast_pass,MESH,STATE,STATE_old,TEND_old,IntSch,dt);
     end
     
     if IntSch == 4
-        U_nm1  = U;
-        V_nm1  = V;
-        Z_nm1  = Z;
-        LU_nm1 = LU;
-        LV_nm1 = LV;
-        LZ_nm1 = LZ;
+        STATE_old.U  = STATE.U;
+        STATE_old.V  = STATE.V;
+        STATE_old.Z  = STATE.Z;
+        TEND_old.LU  = TEND.LU;
+        TEND_old.LV  = TEND.LV;
+        TEND_old.LZ  = TEND.LZ;
     end
     
-    dt = 0.5*slow_dt;
-    [tau_n,U,V,Z,LU,LV,LZ] = integrator(slow_pass,dt,IntSch,nt,...
-                                        U_nm1,V_nm1,Z_nm1,LU_nm1,LV_nm1,LZ_nm1,...
-                                        U,V,Z,dlambda,dtheta,a,Omega,g,...
-                                        lat_u,lat_v,lat_z,...
-                                        nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                        coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+    dt = Split.slow_dt;
+    [tau_n,U,V,Z,LU,LV,LZ] = integrator(slow_pass,MESH,STATE,STATE_old,TEND_old,IntSch,dt);
 end
-
-U_np1 = U;
-V_np1 = V;
-Z_np1 = Z;
 
 tau_n = tau_n*2;

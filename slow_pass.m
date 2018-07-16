@@ -1,8 +1,15 @@
-function [LU,LV,LZ] = slow_pass(U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                                 nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                 coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y)
-% lat/lon coef.
-cosLatV           = cos(lat_v);
+function [LU,LV,LZ] = slow_pass(STATE,MESH)
+
+U = STATE.U;
+V = STATE.V;
+Z = STATE.Z;
+
+nx_u = MESH.nx_u;
+ny_u = MESH.ny_u;
+nx_v = MESH.nx_v;
+ny_v = MESH.ny_v;
+nx_z = MESH.nx_z;
+ny_z = MESH.ny_z;
 
 % Prepare stagger field
 h                 = sqrt(Z);
@@ -22,7 +29,7 @@ uOnV                  = u(:,1:ny_v);
 uOnV_im1(2:nx_v,:)    = uOnV(1:nx_v-1,:);
 uOnV_im1(1     ,:)    = uOnV(nx_v,:);
 uOnV_jp1(:,1:ny_v-1)  = uOnV(:,2:ny_v);
-uOnV_jp1(:,ny_v   )   = 0;
+uOnV_jp1(:,ny_v   )   = u(:,ny_u);
 uOnV_im1jp1(2:nx_v,:) = uOnV_jp1(1:nx_v-1,:);
 uOnV_im1jp1(1     ,:) = uOnV_jp1(nx_v,:);
 
@@ -50,7 +57,7 @@ uU_ip1(nx_u    ,:)  = uU(1,:);
 uU_im1(2:nx_u  ,:)  = uU(1:nx_u-1,:);
 uU_im1(1       ,:)  = uU(nx_u,:);
 
-vcos                     = v.*cosLatV;
+vcos                     = v.*MESH.cosLatV;
 vcosOnU                  = vcos;
 vcosOnU(:,ny_u)          = 0;
 vcosOnU_ip1(1:nx_u-1,:)  = vcosOnU(2:nx_u,:);
@@ -80,12 +87,12 @@ LU1         = ADV_U_x;
 LU2         = ADV_U_y;
 LU2(:,1  )  = 0;
 LU2(:,end)  = 0;
-LU          = coefU_x.*LU1+coefU_y.*LU2;
+LU          = MESH.coefU_x.*LU1+MESH.coefU_y.*LU2;
 LU(:,1  )   = 0;% For southern pole
 LU(:,end)   = 0;% For northern pole
 
 LV1         = ADV_V_x;
 LV2         = ADV_V_y;
-LV          = coefV_x.*LV1+coefV_y.*LV2;
+LV          = MESH.coefV_x.*LV1+MESH.coefV_y.*LV2;
 
 LZ          = 0;

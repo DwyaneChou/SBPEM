@@ -1,16 +1,11 @@
-function [LU1,LV1,LZ1,BU,BV,BZ] = B_operator(pass,time_step,U,V,Z,dlambda,dtheta,a,Omega,g,...
-                                             lat_u,lat_v,lat_z,...
-                                             nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                                             coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y)
+function [LU1,LV1,LZ1,BU,BV,BZ] = B_operator(pass,STATE,MESH,time_step)
 
-U0 = U;
-V0 = V;
-Z0 = Z;
+U0 = STATE.U;
+V0 = STATE.V;
+Z0 = STATE.Z;
 
 % K1
-[LU,LV,LZ] = spatial_discrete(pass,U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                              nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                              coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+[LU,LV,LZ] = spatial_discrete(pass,STATE,MESH);
 LU1  = LU;
 LV1  = LV;
 LZ1  = LZ;
@@ -20,39 +15,33 @@ V_k1 = -LV;
 Z_k1 = -LZ;
 
 % K2
-U    = U0 + 0.5*time_step*U_k1;
-V    = V0 + 0.5*time_step*V_k1;
-Z    = Z0 + 0.5*time_step*Z_k1;
+STATE.U = U0 + 0.5*time_step*U_k1;
+STATE.V = V0 + 0.5*time_step*V_k1;
+STATE.Z = Z0 + 0.5*time_step*Z_k1;
 
-[LU,LV,LZ] = spatial_discrete(pass,U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                              nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                              coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+[LU,LV,LZ] = spatial_discrete(pass,STATE,MESH);
                                   
 U_k2 = -LU;
 V_k2 = -LV;
 Z_k2 = -LZ;
 
 % K3
-U    = U0 + 0.5*time_step*U_k2;
-V    = V0 + 0.5*time_step*V_k2;
-Z    = Z0 + 0.5*time_step*Z_k2;
+STATE.U = U0 + 0.5*time_step*U_k2;
+STATE.V = V0 + 0.5*time_step*V_k2;
+STATE.Z = Z0 + 0.5*time_step*Z_k2;
 
-[LU,LV,LZ] = spatial_discrete(pass,U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                              nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                              coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+[LU,LV,LZ] = spatial_discrete(pass,STATE,MESH);
                                   
 U_k3 = -LU;
 V_k3 = -LV;
 Z_k3 = -LZ;
 
 % K4
-U    = U0 + time_step*U_k3;
-V    = V0 + time_step*V_k3;
-Z    = Z0 + time_step*Z_k3;
+STATE.U = U0 + time_step*U_k3;
+STATE.V = V0 + time_step*V_k3;
+STATE.Z = Z0 + time_step*Z_k3;
 
-[LU,LV,LZ] = spatial_discrete(pass,U,V,Z,dlambda,dtheta,a,Omega,g,lat_u,lat_v,lat_z,...
-                              nx_u,ny_u,nx_v,ny_v,nx_z,ny_z,...
-                              coefU_x,coefU_y,coefV_x,coefV_y,coefZ_x,coefZ_y);
+[LU,LV,LZ] = spatial_discrete(pass,STATE,MESH);
                                   
 U_k4  = -LU;
 V_k4  = -LV;

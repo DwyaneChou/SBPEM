@@ -1,58 +1,46 @@
-function output_netCDF(int_step_num,output_num,output_precision,...
-                       U,V,Z,dlambda,dtheta,a,Omega,g,...
-                       lon_u,lon_v,lon_z,lat_u,lat_v,lat_z,...
-                       nx_u,ny_u,nx_v,ny_v,nx_z,ny_z)
+function output_netCDF(MESH,STATE,history_interval,output_count,output_precision,output_num)
 
 f_out   = 'output.nc';
-    
-r2d     = 180.0/pi;
-lon_u   = lon_u*r2d;
-lat_u   = lat_u*r2d;
-lon_v   = lon_v*r2d;
-lat_v   = lat_v*r2d;
-lon_z   = lon_z*r2d;
-lat_z   = lat_z*r2d;
-dlambda = dlambda*r2d;
-dtheta  = dtheta*r2d;
 
 % Inverse IAP transformation
-h                 = sqrt(Z);
-hip1(1:nx_z-1,:)  = h(2:nx_z,:);
-hip1(nx_z    ,:)  = h(1,:);
-hjp1(:,1:ny_z-1)  = h(:,2:ny_z);
-hjp1(:,ny_z    )  = 0;
+h                     = sqrt(STATE.Z);
+hip1(1:MESH.nx_z-1,:) = h(2:MESH.nx_z,:);
+hip1(MESH.nx_z    ,:) = h(1,:);
+hjp1(:,1:MESH.ny_z-1) = h(:,2:MESH.ny_z);
+hjp1(:,MESH.ny_z    ) = 0;
 
-hOnU              = 0.5*(h+hip1); % h on u grid
-hOnV_temp         = 0.5*(h+hjp1); % h on v grid
-hOnV              = hOnV_temp(:,1:ny_v);
+hOnU      = 0.5*(h+hip1); % h on u grid
+hOnV_temp = 0.5*(h+hjp1); % h on v grid
+hOnV      = hOnV_temp(:,1:MESH.ny_v);
 
-u                 = U./hOnU;
-v                 = V./hOnV;
+u         = STATE.U./hOnU;
+v         = STATE.V./hOnV;
 
 % Write Data into netCDF
-west_east        = nx_u;
-south_north      = ny_u;
-south_north_stag = ny_v;
+west_east        = MESH.nx_u;
+south_north      = MESH.ny_u;
+south_north_stag = MESH.ny_v;
 
-if output_num==0
+if output_count==0
     mode           = netcdf.getConstant('NETCDF4');
     mode           = bitor(mode,netcdf.getConstant('CLOBBER'));
     ncid           = netcdf.create(f_out,mode);
     disp(['ncid = ',num2str(ncid)])
     
     % Define Dimensions
-    time_dimID             = netcdf.defDim(ncid,'time'            ,int_step_num);
+    time_dimID             = netcdf.defDim(ncid,'time'            ,output_num);
     west_east_dimID        = netcdf.defDim(ncid,'west_east'       ,west_east);
     south_north_dimID      = netcdf.defDim(ncid,'south_north'     ,south_north);
     south_north_stag_dimID = netcdf.defDim(ncid,'south_north_stag',south_north_stag);
     
     % Define Attribute
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Model_Source' ,'SBPEM written by Zhou Lilong')
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'dlambda'      ,dlambda)
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'dtheta'       ,dtheta)
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'earth_radius' ,a)
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Omega'        ,Omega)
-    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'g'            ,g)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Model_Source'     ,'SBPEM written by Zhou Lilong')
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'dlambda'          ,MESH.dlambda)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'dtheta'           ,MESH.dtheta)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'earth_radius'     ,MESH.a)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Omega'            ,MESH.Omega)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'g'                ,MESH.g)
+    netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'history_interval' ,history_interval)
     
     % Define Variables
     XLONG_U_id = netcdf.defVar(ncid,'XLONG_U',output_precision,[west_east_dimID,south_north_dimID]);
@@ -92,15 +80,15 @@ if output_num==0
     netcdf.putAtt(ncid,Z_id,'description','geopotential height');
     
     % Put Variables
-    netcdf.putVar(ncid, XLONG_U_id ,lon_u);
-    netcdf.putVar(ncid, XLAT_U_id  ,lat_u);
-    netcdf.putVar(ncid, XLONG_V_id ,lon_v);
-    netcdf.putVar(ncid, XLAT_V_id  ,lat_v);
-    netcdf.putVar(ncid, XLONG_M_id ,lon_z);
-    netcdf.putVar(ncid, XLAT_M_id  ,lat_z);
-    netcdf.putVar(ncid, U_id       ,[0,0,0],[west_east,south_north,1]     ,u);
-    netcdf.putVar(ncid, V_id       ,[0,0,0],[west_east,south_north_stag,1],v);
-    netcdf.putVar(ncid, Z_id       ,[0,0,0],[west_east,south_north,1]     ,Z);
+    netcdf.putVar(ncid, XLONG_U_id ,MESH.lon_u);
+    netcdf.putVar(ncid, XLAT_U_id  ,MESH.lat_u);
+    netcdf.putVar(ncid, XLONG_V_id ,MESH.lon_v);
+    netcdf.putVar(ncid, XLAT_V_id  ,MESH.lat_v);
+    netcdf.putVar(ncid, XLONG_M_id ,MESH.lon_z);
+    netcdf.putVar(ncid, XLAT_M_id  ,MESH.lat_z);
+    netcdf.putVar(ncid, U_id       ,[0,0,0],[west_east,south_north     ,1],u      );
+    netcdf.putVar(ncid, V_id       ,[0,0,0],[west_east,south_north_stag,1],v      );
+    netcdf.putVar(ncid, Z_id       ,[0,0,0],[west_east,south_north     ,1],STATE.Z);
     
     netcdf.close(ncid)
     
@@ -113,9 +101,9 @@ else
     
     netcdf.reDef(ncid)
     
-    netcdf.putVar(ncid, U_id     ,[0,0,output_num],[nx_u,ny_u,1],u);
-    netcdf.putVar(ncid, V_id     ,[0,0,output_num],[nx_v,ny_v,1],v);
-    netcdf.putVar(ncid, Z_id     ,[0,0,output_num],[nx_z,ny_z,1],Z);
+    netcdf.putVar(ncid, U_id     ,[0,0,output_count],[west_east,south_north     ,1],u      );
+    netcdf.putVar(ncid, V_id     ,[0,0,output_count],[west_east,south_north_stag,1],v      );
+    netcdf.putVar(ncid, Z_id     ,[0,0,output_count],[west_east,south_north     ,1],STATE.Z);
     
     netcdf.close(ncid)
 end
