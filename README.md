@@ -48,7 +48,7 @@ Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
 
 # Update log
 
-V3.1:
+V3.1 :
 
 (1) Optimized code structure, integrated the variables into 3 structures: MESH, STATE and TEND.
 
@@ -56,7 +56,7 @@ V3.1:
 
 (3) Fixed several bugs.
 
-V3.0:
+V3.0 :
 
 (1) Added integral scheme RK4, Leap-frog, Predict-Correct.
 
