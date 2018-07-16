@@ -11,7 +11,7 @@ L_operator       : Antisymmetry Operator
 
 B_operator       : Harmoniously Diffusive Operator
 
-Time Integration : Square conservation integral scheme with variable time step
+Time Integration : 2nd order conservation integral scheme with variable time step
 
 Integral Scheme  :
 
@@ -45,3 +45,21 @@ National Meteorological Center of CMA
 College of Earth and Planetary Sciences, UCAS
 
 Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
+
+Update log:
+
+V3.1:
+
+(1) Optimized code structure, integrated the variables into 3 structures: MESH, STATE and TEND.
+
+(2) Improved the running speed.
+
+(3) Fixed several bugs.
+
+V3.0:
+
+(1) Added integral scheme RK4, Leap-frog, Predict-Correct.
+
+(2) Added 2nd order conservation split scheme.
+
+(3) Modified the grid. Now, the mass grid is on the full grid, and v is on the half grid.
