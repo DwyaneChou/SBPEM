@@ -29,7 +29,7 @@ uOnV                  = u(:,1:ny_v);
 uOnV_im1(2:nx_v,:)    = uOnV(1:nx_v-1,:);
 uOnV_im1(1     ,:)    = uOnV(nx_v,:);
 uOnV_jp1(:,1:ny_v-1)  = uOnV(:,2:ny_v);
-uOnV_jp1(:,ny_v   )   = u(:,ny_u);
+uOnV_jp1(:,ny_v    )  = u(:,ny_u);
 uOnV_im1jp1(2:nx_v,:) = uOnV_jp1(1:nx_v-1,:);
 uOnV_im1jp1(1     ,:) = uOnV_jp1(nx_v,:);
 
@@ -42,20 +42,20 @@ Ujp1(:,ny_u    )      = 0;% For pole
 Ujm1(:,2:ny_u  )      = U(:,1:ny_u-1);
 Ujm1(:,1       )      = 0;% For pole
 
-Vip1(1:nx_v-1,:)    = V(2:nx_v,:);
-Vip1(nx_v    ,:)    = V(1,:);
-Vim1(2:nx_v  ,:)    = V(1:nx_v-1,:);
-Vim1(1       ,:)    = V(nx_v    ,:);
-Vjp1(:,1:ny_v-1)    = V(:,2:ny_v);
-Vjp1(:,ny_v    )    = 0;% For pole
-Vjm1(:,2:ny_v  )    = V(:,1:ny_v-1);
-Vjm1(:,1       )    = 0;% For pole
+Vip1(1:nx_v-1,:)      = V(2:nx_v,:);
+Vip1(nx_v    ,:)      = V(1,:);
+Vim1(2:nx_v  ,:)      = V(1:nx_v-1,:);
+Vim1(1       ,:)      = V(nx_v    ,:);
+Vjp1(:,1:ny_v-1)      = V(:,2:ny_v);
+Vjp1(:,ny_v    )      = 0;% For pole
+Vjm1(:,2:ny_v  )      = V(:,1:ny_v-1);
+Vjm1(:,1       )      = 0;% For pole
 
-uU                  = u.*U;
-uU_ip1(1:nx_u-1,:)  = uU(2:nx_u,:);
-uU_ip1(nx_u    ,:)  = uU(1,:);
-uU_im1(2:nx_u  ,:)  = uU(1:nx_u-1,:);
-uU_im1(1       ,:)  = uU(nx_u,:);
+uU                    = u.*U;
+uU_ip1(1:nx_u-1,:)    = uU(2:nx_u,:);
+uU_ip1(nx_u    ,:)    = uU(1,:);
+uU_im1(2:nx_u  ,:)    = uU(1:nx_u-1,:);
+uU_im1(1       ,:)    = uU(nx_u,:);
 
 vcos                     = v.*MESH.cosLatV;
 vcosOnU                  = vcos;
@@ -67,32 +67,26 @@ vcosOnU_jm1(:,1       )  = 0;% For pole
 vcosOnU_ip1jm1(:,2:ny_u) = vcosOnU_ip1(:,1:ny_u-1);
 vcosOnU_ip1jm1(:,1     ) = 0;% For pole
 
-vVcos                 = vcos.*V;
-vVcos_jp1(:,1:ny_v-1) = vVcos(:,2:ny_v);
-vVcos_jp1(:,ny_v    ) = 0;% For pole
-vVcos_jm1(:,2:ny_v  ) = vVcos(:,1:ny_v-1);
-vVcos_jm1(:,1       ) = 0;% For pole
+vVcos                    = vcos.*V;
+vVcos_jp1(:,1:ny_v-1)    = vVcos(:,2:ny_v);
+vVcos_jp1(:,ny_v    )    = 0;% For pole
+vVcos_jm1(:,2:ny_v  )    = vVcos(:,1:ny_v-1);
+vVcos_jm1(:,1       )    = 0;% For pole
 
 % Advection
-ADV_U_x  = u      .*(Uip1-Uim1) + uU_ip1    - uU_im1;
+ADV_U_x  = u    .*(Uip1-Uim1) + uU_ip1    - uU_im1;
 
 ADV_U_y  = (vcosOnU_ip1 + vcosOnU).*Ujp1 - (vcosOnU_ip1jm1 + vcosOnU_jm1).*Ujm1;
 
 ADV_V_x  = (uOnV_jp1    + uOnV   ).*Vip1 - (uOnV_im1jp1    + uOnV_im1   ).*Vim1;
 
-ADV_V_y  = vcos   .*(Vjp1-Vjm1) + vVcos_jp1 - vVcos_jm1;
+ADV_V_y  = vcos .*(Vjp1-Vjm1) + vVcos_jp1 - vVcos_jm1;
 
 % Construct L operator
-LU1         = ADV_U_x;
-LU2         = ADV_U_y;
-LU2(:,1  )  = 0;
-LU2(:,end)  = 0;
-LU          = MESH.coefU_x.*LU1+MESH.coefU_y.*LU2;
+LU          = MESH.coefU_x.*ADV_U_x+MESH.coefU_y.*ADV_U_y;
 LU(:,1  )   = 0;% For southern pole
 LU(:,end)   = 0;% For northern pole
 
-LV1         = ADV_V_x;
-LV2         = ADV_V_y;
-LV          = MESH.coefV_x.*LV1+MESH.coefV_y.*LV2;
+LV          = MESH.coefV_x.*ADV_V_x + MESH.coefV_y.*ADV_V_y;
 
 LZ          = 0;

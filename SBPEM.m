@@ -14,11 +14,11 @@ time_start = clock;
 IntSch = 4;
 
 % Define the grid resolution
-MESH.dx = 2.0; % Degree
-MESH.dy = 2.0; % Degree
+MESH.dx = 1.0; % Degree
+MESH.dy = 1.0; % Degree
 
 % Define time(seconds)
-time_step     = 20.0;
+time_step     = 5.0;
 run_time      = 33*24*3600;
 
 % Choose the split parameter

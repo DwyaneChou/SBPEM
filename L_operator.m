@@ -36,8 +36,7 @@ Zip1(1:nx_z-1,:)  = Z(2:nx_z,:);
 Zip1(nx_z    ,:)  = Z(1,:);
 
 ZOnV                  = Z(:,1:ny_v);
-ZOnV_jp1(:,1:ny_v-1)  = ZOnV(:,2:ny_v);
-ZOnV_jp1(:,ny_v    )  = Z(:,ny_z);
+ZOnV_jp1(:,1:ny_v-1)  = Z(:,2:ny_z);
 
 uOnV                  = u(:,1:ny_v);
 uOnV_im1(2:nx_v,:)    = uOnV(1:nx_v-1,:);
