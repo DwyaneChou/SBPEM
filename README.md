@@ -1,5 +1,5 @@
 # SBPEM
-A Spherical Barotropic Primitive Equation Model
+# A Spherical Barotropic Primitive Equation Model
 
 This model had been written in Matlab code.
 
@@ -46,7 +46,7 @@ College of Earth and Planetary Sciences, UCAS
 
 Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
 
-Update log:
+# Update log:
 
 V3.1:
 
