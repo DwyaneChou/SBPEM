@@ -15,7 +15,7 @@ Time Integration : 2nd order conservation integral scheme with variable time ste
 
 Integral Scheme  :
 
-1. HDO(harmonious diffusion operator)
+1. HDO(Harmoniously Diffusive Operator)
 
 2. A improved 4th order Runge-Kuuta
 
