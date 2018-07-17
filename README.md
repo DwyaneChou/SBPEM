@@ -19,9 +19,9 @@ Integral Scheme  :
 
 2. A improved 4th order Runge-Kuuta
 
-3. Predict Correct
+3. Predict-Correct
 
-4. leap frog
+4. Leap frog
 
 Split Scheme     : CSP2(2nd order Conservative Splitting Pattern)
 
