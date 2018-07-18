@@ -42,6 +42,37 @@ U : h\*u
 
 V : h\*v
 
+# File Intrduction
+
+SBPEM.m is the main script for this model;
+
+L_operator.m is the antisymmetry operator;
+
+IAP.m is the IAP transformation program;
+
+fast_pass.m and slow_pass.m are the fast-wave part and slow-wave part for split scheme;
+
+genMesh.m is the mesh generator;
+
+B_operator.m is the (HDO)Harmoniously Diffusive Operator;
+
+HDO.m is the HDO integrate scheme;
+
+LF.m is the Leap-Frog integrate scheme;
+
+PC is the Predict-Correct integrate scheme;
+
+RK4 is a improved Runge-Kutta scheme;
+
+Haurwitz.m is the script to generate the Rossby-Haurwitz wave as the initial condition for testing the model;
+
+split_integrator.m is the split integrate procedure;
+
+spatial_discrete.m is the script which be used to choose wave-pass type;
+
+inner_product.m is used to calculate the inner product;
+
+output_netCDF.m is the I/O program.
 
 The output file name is "output.nc", you can plot the fields rapidly by using Panoply, ncview, ncbrowse and so on.
 
