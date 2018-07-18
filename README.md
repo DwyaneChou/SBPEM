@@ -15,13 +15,13 @@ Time Integration : 2nd order conservation integral scheme with variable time ste
 
 Integral Scheme  :
 
-1. HDO(harmonious diffusion operator)
+1. HDO(Harmoniously Diffusive Operator)
 
 2. A improved 4th order Runge-Kuuta
 
-3. Predict Correct
+3. Predict-Correct
 
-4. leap frog
+4. Leap frog
 
 Split Scheme     : CSP2(2nd order Conservative Splitting Pattern)
 
