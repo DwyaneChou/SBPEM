@@ -44,10 +44,16 @@ MESH.dtheta  = dy*d2r;
 
 % lat/lon coef.
 MESH.sinLatU                       = sin(MESH.lat_u);
+MESH.sinLatU(:,1  )                = -1;
+MESH.sinLatU(:,end)                = 1;
 MESH.sinLatU_jp1(:,1:MESH.ny_u-1)  = MESH.sinLatU(:,2:MESH.ny_u);
 MESH.sinLatU_jp1(:,MESH.ny_u    )  = 1;% For pole
 
 MESH.sinLatV                       = sin(MESH.lat_v);
+
+MESH.sinLatZ                       = sin(MESH.lat_z);
+MESH.sinLatZ(:,1  )                = -1;
+MESH.sinLatZ(:,end)                = 1;
 
 MESH.tanLatU                       = tan(MESH.lat_u);
 MESH.tanLatU(:,1  )                = 0;% For pole
@@ -63,6 +69,9 @@ MESH.cosLatVOnU                    = MESH.cosLatV;
 MESH.cosLatVOnU(:,MESH.ny_u)       = 0;% For pole
 MESH.cosLatVOnU_jm1(:,2:MESH.ny_u) = MESH.cosLatVOnU(:,1:MESH.ny_u-1);
 MESH.cosLatVOnU_jm1(:,1     )      = 0;% For pole
+
+MESH.cosLatZOnV                    = MESH.cosLatZ(:,1:MESH.ny_v);
+MESH.cosLatZOnV_jp1(:,1:MESH.ny_v) = MESH.cosLatZ(:,2:MESH.ny_z);
 
 % Reset pole
 MESH.cosLatZ(:,1  )                = 0.25*MESH.cosLatV(:,1);

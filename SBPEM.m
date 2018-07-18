@@ -14,11 +14,11 @@ time_start = clock;
 IntSch = 4;
 
 % Define the grid resolution
-MESH.dx = 1.0; % Degree
-MESH.dy = 1.0; % Degree
+MESH.dx = 3.0; % Degree
+MESH.dy = 3.0; % Degree
 
 % Define time(seconds)
-time_step     = 5.0;
+time_step     = 48.0;
 run_time      = 33*24*3600;
 
 % Choose the split parameter
@@ -64,7 +64,7 @@ output_count = 0;
 output_num   = ceil(run_time/history_interval)+1;
 
 output_netCDF(MESH,STATE,history_interval,output_count,output_precision,output_num)
-          
+
 STATE_old.U  = 0;
 STATE_old.V  = 0;
 STATE_old.Z  = 0;
