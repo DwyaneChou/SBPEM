@@ -38,9 +38,9 @@ Z : Geopotential Height in m^2/s^2
 
 h : sqrt(Z), the gravity wave phase speed
 
-U : h.\*u
+U : h\*u
 
-V : h.\*v
+V : h\*v
 
 
 The output file name is "output.nc", you can plot the fields rapidly by using Panoply,ncview,ncbrowse and so on.
