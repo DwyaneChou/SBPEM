@@ -5,7 +5,9 @@ This model had been written in Matlab code.
 
 Main Characteristics
 
-Equations        : IAP transformation
+Mesh             : Arakawa C grid
+
+Equations        : Shallow water equations with IAP transformation.
 
 L_operator       : Antisymmetry Operator
 
@@ -21,7 +23,7 @@ Integral Scheme  :
 
 3. Predict-Correct
 
-4. Leap frog
+4. Leap-frog
 
 Split Scheme     : CSP2(2nd order Conservative Splitting Pattern)
 
@@ -33,6 +35,12 @@ u : u component wind speed in m/s
 v : v component wind speed in m/s
 
 Z : Geopotential Height in m^2/s^2
+
+h : sqrt(Z), the gravity wave phase speed
+
+U : h.\*u
+
+V : h.\*v
 
 
 The output file name is "output.nc", you can plot the fields rapidly by using Panoply,ncview,ncbrowse and so on.
