@@ -43,7 +43,7 @@ U : h\*u
 V : h\*v
 
 
-The output file name is "output.nc", you can plot the fields rapidly by using Panoply,ncview,ncbrowse and so on.
+The output file name is "output.nc", you can plot the fields rapidly by using Panoply, ncview, ncbrowse and so on.
 
 
 Zhou Lilong
