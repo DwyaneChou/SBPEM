@@ -11,13 +11,13 @@ Equations        : Shallow water equations with IAP transformation.
 
 L_operator       : Antisymmetry Operator
 
-B_operator       : Harmoniously Diffusive Operator
+B_operator       : Consisitent Dissipation Operator
 
 Time Integration : 2nd order conservation integral scheme with variable time step
 
 Integral Scheme  :
 
-1. HDO(Harmoniously Diffusive Operator)
+1. CDO(Consisitent Dissipation Operator)
 
 2. A improved 4th order Runge-Kuuta
 
@@ -54,9 +54,9 @@ fast_pass.m and slow_pass.m are the fast-wave part and slow-wave part for split 
 
 genMesh.m is the mesh generator;
 
-B_operator.m is the (HDO)Harmoniously Diffusive Operator;
+B_operator.m is the (CDO)Consisitent Dissipation Operator;
 
-HDO.m is the HDO integrate scheme;
+CDO.m is the CDO integrate scheme;
 
 LF.m is the Leap-Frog integrate scheme;
 
