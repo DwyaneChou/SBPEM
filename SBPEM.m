@@ -7,25 +7,25 @@ clear
 time_start = clock;
 
 % Choose the integral scheme
-% 1 for HDO(harmonious diffusion operator)
+% 1 for CDO(Consisitent Dissipation Operator)
 % 2 for 4th order Runge-Kutta
 % 3 for Predict Correct
 % 4 for leap frog
-IntSch = 4;
+IntSch = 1;
 
 % Define the grid resolution
 MESH.dx = 3.0; % Degree
 MESH.dy = 3.0; % Degree
 
 % Define time(seconds)
-time_step     = 48.0;
+time_step     = 30.0;
 run_time      = 33*24*3600;
 
 % Choose the split parameter
 % split_scheme = 1 for CSP2
 % split_scheme = 0 for no split
 Split.split_scheme = 0;
-Split.split_num    = 5;
+Split.split_num    = 8;
 
 % Define output
 history_interval = 3600;

@@ -1,5 +1,5 @@
-% Harmonious Diffusion Operator
-function [tau_n,U_np1,V_np1,Z_np1,LU0,LV0,LZ0] = HDO(pass,MESH,STATE,time_step)
+% Consisitent Dissipation Operator
+function [tau_n,U_np1,V_np1,Z_np1,LU0,LV0,LZ0] = CDO(pass,MESH,STATE,time_step)
 
 [LU,LV,LZ,BU,BV,BZ] = B_operator(pass,STATE,MESH,time_step);
 LU0  = LU;
