@@ -11,14 +11,14 @@ time_start = clock;
 % 2 for 4th order Runge-Kutta
 % 3 for Predict Correct
 % 4 for leap frog
-IntSch = 1;
+IntSch = 3;
 
 % Define the grid resolution
 MESH.dx = 3.0; % Degree
 MESH.dy = 3.0; % Degree
 
 % Define time(seconds)
-time_step     = 30.0;
+time_step     = 48.0;
 run_time      = 33*24*3600;
 
 % Choose the split parameter
@@ -63,7 +63,7 @@ int_step_num = ceil(run_time/time_step);
 output_count = 0;
 output_num   = ceil(run_time/history_interval)+1;
 
-output_netCDF(MESH,STATE,history_interval,output_count,output_precision,output_num)
+output_netCDF(MESH,STATE,history_interval,output_count,output_precision)
 
 STATE_old.U  = 0;
 STATE_old.V  = 0;
@@ -104,7 +104,7 @@ for it = 1:int_step_num
         ti_end = clock;
         
         output_count = output_count+1;
-        output_netCDF(MESH,STATE,history_interval,output_count,output_precision,output_num)
+        output_netCDF(MESH,STATE,history_interval,output_count,output_precision)
                   
         total_energy       = inner_product(MESH,STATE.U,STATE.V,STATE.Z,STATE.U,STATE.V,STATE.Z);
         total_mass         = sum(sum(STATE.Z.*MESH.cosLatZ));

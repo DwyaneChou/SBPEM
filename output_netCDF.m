@@ -1,4 +1,4 @@
-function output_netCDF(MESH,STATE,history_interval,output_count,output_precision,output_num)
+function output_netCDF(MESH,STATE,history_interval,output_count,output_precision)
 
 f_out   = 'output.nc';
 
@@ -28,7 +28,7 @@ if output_count==0
     disp(['ncid = ',num2str(ncid)])
     
     % Define Dimensions
-    time_dimID             = netcdf.defDim(ncid,'time'            ,output_num);
+    time_dimID             = netcdf.defDim(ncid,'time'            ,netcdf.getConstant('NC_UNLIMITED'));
     west_east_dimID        = netcdf.defDim(ncid,'west_east'       ,west_east);
     south_north_dimID      = netcdf.defDim(ncid,'south_north'     ,south_north);
     south_north_stag_dimID = netcdf.defDim(ncid,'south_north_stag',south_north_stag);
