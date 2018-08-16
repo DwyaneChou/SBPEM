@@ -2,6 +2,7 @@ function [LU,LV,LZ] = L_operator(STATE,MESH)
 
 Omega = MESH.Omega;
 a     = MESH.a;
+ghs   = MESH.ghs;
 
 U = STATE.U;
 V = STATE.V;
@@ -37,6 +38,12 @@ Zip1(nx_z    ,:)           = Z(1,:);
 
 ZOnV                       = Z(:,1:ny_v);
 ZOnV_jp1(:,1:ny_v)         = Z(:,2:ny_z);
+
+ghs_ip1(1:nx_z-1,:)        = ghs(2:nx_z,:);
+ghs_ip1(nx_z    ,:)        = ghs(1,:);
+
+ghsOnV                     = ghs(:,1:ny_v);
+ghsOnV_jp1(:,1:ny_v)       = ghs(:,2:ny_z);
 
 uOnV                       = u(:,1:ny_v);
 uOnV_im1(2:nx_v,:)         = uOnV(1:nx_v-1,:);
@@ -109,11 +116,11 @@ ADV_V_x = (uOnV_jp1    + uOnV   ).*Vip1 - (uOnV_im1jp1    + uOnV_im1   ).*Vim1;
 ADV_V_y = vcos .*(Vjp1-Vjm1) + vVcos_jp1 - vVcos_jm1;
 
 % Pressure Gradient Force
-PGF_U             = 4.0*MESH.coefU_x.*hOnU.*(Zip1-Z);
+PGF_U             = 4.0*MESH.coefU_x.*hOnU.*(Zip1+ghs_ip1-Z-ghs);
 PGF_U(:,1  )      = 0;
 PGF_U(:,end)      = 0;
 
-PGF_V_temp        = hOnV.*(ZOnV_jp1-ZOnV);
+PGF_V_temp        = hOnV.*(ZOnV_jp1+ghsOnV_jp1-ZOnV-ghsOnV);
 PGF_V             = PGF_V_temp/(MESH.a*MESH.dtheta);
 
 % Colioris Force
@@ -183,9 +190,9 @@ LZ          = LZ1+LZ2;
 % LV1_V = sum(sum(LV1.*V.*MESH.cosLatV));
 % LV2_V = sum(sum(LV2.*V.*MESH.cosLatV));
 % PGUU  = sum(sum(PGF_U.*U.*MESH.cosLatU));
-% LZ1Z  = sum(sum(LZ1.*Z.*MESH.cosLatZ));
+% LZ1Z  = sum(sum(LZ1.*(Z+ghs).*MESH.cosLatZ));
 % PGVV  = sum(sum(PGF_V.*V.*MESH.cosLatV));
-% LZ2Z  = sum(sum(LZ2.*Z.*MESH.cosLatZ));
+% LZ2Z  = sum(sum(LZ2.*(Z+ghs).*MESH.cosLatZ));
 % fVU   = sum(sum(CFUU.*MESH.cosLatU));
 % fUV   = sum(sum(CFVV.*MESH.cosLatV));
 % CUV   = sum(sum(CTUU.*MESH.cosLatU));

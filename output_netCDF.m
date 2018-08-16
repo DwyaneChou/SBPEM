@@ -15,6 +15,9 @@ hOnV      = hOnV_temp(:,1:MESH.ny_v);
 
 u         = STATE.U./hOnU;
 v         = STATE.V./hOnV;
+Z         = STATE.Z;
+
+ghs       = MESH.ghs;
 
 % Write Data into netCDF
 west_east        = MESH.nx_u;
@@ -79,6 +82,10 @@ if output_count==0
     netcdf.putAtt(ncid,Z_id,'units','m^2/s^2');
     netcdf.putAtt(ncid,Z_id,'description','geopotential height');
     
+    ghs_id = netcdf.defVar(ncid,'ghs',output_precision,[west_east_dimID,south_north_dimID]);
+    netcdf.putAtt(ncid,ghs_id,'units','m^2/s^2');
+    netcdf.putAtt(ncid,ghs_id,'description','geopotential height on surface');
+    
     % Put Variables
     netcdf.putVar(ncid, XLONG_U_id ,MESH.lon_u);
     netcdf.putVar(ncid, XLAT_U_id  ,MESH.lat_u);
@@ -86,9 +93,10 @@ if output_count==0
     netcdf.putVar(ncid, XLAT_V_id  ,MESH.lat_v);
     netcdf.putVar(ncid, XLONG_M_id ,MESH.lon_z);
     netcdf.putVar(ncid, XLAT_M_id  ,MESH.lat_z);
-    netcdf.putVar(ncid, U_id       ,[0,0,0],[west_east,south_north     ,1],u      );
-    netcdf.putVar(ncid, V_id       ,[0,0,0],[west_east,south_north_stag,1],v      );
-    netcdf.putVar(ncid, Z_id       ,[0,0,0],[west_east,south_north     ,1],STATE.Z);
+    netcdf.putVar(ncid, U_id       ,[0,0,0],[west_east,south_north     ,1],u  );
+    netcdf.putVar(ncid, V_id       ,[0,0,0],[west_east,south_north_stag,1],v  );
+    netcdf.putVar(ncid, Z_id       ,[0,0,0],[west_east,south_north     ,1],Z  );
+    netcdf.putVar(ncid, ghs_id     ,[0,0  ],[west_east,south_north       ],ghs);
     
     netcdf.close(ncid)
     

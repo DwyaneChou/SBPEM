@@ -6,6 +6,9 @@ clear
 
 time_start = clock;
 
+% Choose test case from 'RH' or 'IM'
+test_case = 'IM';
+
 % Choose the integral scheme
 % 1 for CDO(Consisitent Dissipation Operator)
 % 2 for 4th order Runge-Kutta
@@ -14,12 +17,12 @@ time_start = clock;
 IntSch = 3;
 
 % Define the grid resolution
-MESH.dx = 3.0; % Degree
-MESH.dy = 3.0; % Degree
+MESH.dx = 2.0; % Degree
+MESH.dy = 2.0; % Degree
 
 % Define time(seconds)
-time_step     = 48.0;
-run_time      = 33*24*3600;
+time_step     = 30.0;
+run_time      = 30*24*3600;
 
 % Choose the split parameter
 % split_scheme = 1 for CSP2
@@ -41,13 +44,18 @@ MESH = genMesh(MESH);
 
 max_int_step = MESH.a*cosd(90-MESH.dy)*MESH.dlambda/300;
 
-% Initial fields with Rossby-Haurwitz Wave
-[u,v,STATE.Z] = Haurwitz(MESH);
+if strcmp(test_case,'RH')
+    % Initial fields with Rossby-Haurwitz Wave
+    [u,v,STATE.Z,MESH.ghs] = Haurwitz(MESH);
+elseif strcmp(test_case,'IM')
+    % Initial fields with Isolated Mountain
+    [u,v,STATE.Z,MESH.ghs] = Isolated_Mountain(MESH);
+end
 
 % IAP transformation
 STATE = IAP(MESH,STATE,u,v);
 
-total_energy0 = inner_product(MESH,STATE.U,STATE.V,STATE.Z,STATE.U,STATE.V,STATE.Z);
+total_energy0 = inner_product(MESH,STATE.U,STATE.V,(STATE.Z+MESH.ghs),STATE.U,STATE.V,(STATE.Z+MESH.ghs));
 total_mass0   = sum(sum(STATE.Z.*MESH.cosLatZ));
 
 % Compute the coefficient for L operator
@@ -71,7 +79,8 @@ STATE_old.Z  = 0;
 TEND_old.LU  = 0;
 TEND_old.LV  = 0;
 TEND_old.LZ  = 0;
-ti_start = clock;
+ti_start     = clock;
+sum_it       = 0;
 for it = 1:int_step_num
     % Set previous tend and status for leap-frog
     if it>1
@@ -102,11 +111,15 @@ for it = 1:int_step_num
     % Output
 	if rem(integral_time,history_interval)==0 && integral_time>=history_interval
         ti_end = clock;
-        
+                
         output_count = output_count+1;
         output_netCDF(MESH,STATE,history_interval,output_count,output_precision)
+        
+        sum_it  = sum_it + etime(ti_end,ti_start);
+        ave_it  = sum_it/(output_count+1);
+        rest_it = ave_it*(output_num-1-output_count)/60;
                   
-        total_energy       = inner_product(MESH,STATE.U,STATE.V,STATE.Z,STATE.U,STATE.V,STATE.Z);
+        total_energy       = inner_product(MESH,STATE.U,STATE.V,(STATE.Z+MESH.ghs),STATE.U,STATE.V,(STATE.Z+MESH.ghs));
         total_mass         = sum(sum(STATE.Z.*MESH.cosLatZ));
         energy_change_rate = (total_energy-total_energy0)/total_energy0; %ECR
         mass_change_rate   = (total_mass-total_mass0)/total_mass0;       %MCR
@@ -118,6 +131,7 @@ for it = 1:int_step_num
         disp(['ECR           = ',num2str(energy_change_rate)]);
         disp(['MCR           = ',num2str(mass_change_rate)]);
         disp(['Integral time = ',num2str(etime(ti_end,ti_start))]);
+        disp(['Rest Int time = ',num2str(rest_it)]);
         disp('                                     ');
         
         ti_start = clock;

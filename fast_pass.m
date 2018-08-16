@@ -2,6 +2,8 @@ function [LU,LV,LZ] = fast_pass(STATE,MESH)
 
 Omega = MESH.Omega;
 a     = MESH.a;
+g     = MESH.g;
+hs    = MESH.hs;
 
 U = STATE.U;
 V = STATE.V;
@@ -37,6 +39,13 @@ Zip1(nx_z    ,:)           = Z(1,:);
 ZOnV                       = Z(:,1:ny_v);
 ZOnV_jp1(:,1:ny_v)         = Z(:,2:ny_z);
 
+ghs                        = g*hs;
+ghs_ip1(1:nx_z-1,:)        = ghs(2:nx_z,:);
+ghs_ip1(nx_z    ,:)        = ghs(1,:);
+
+ghsOnV                     = ghs(:,1:ny_v);
+ghsOnV_jp1(:,1:ny_v)       = ghs(:,2:ny_z);
+
 Uim1(2:nx_u  ,:)           = U(1:nx_u-1,:);
 Uim1(1       ,:)           = U(nx_u,:);
 Ujp1(:,1:ny_u-1)           = U(:,2:ny_u);
@@ -66,11 +75,11 @@ VcosOnZ_jm1(:,2:ny_z)      = VcosOnZ(:,1:ny_z-1);
 VcosOnZ_jm1(:,1     )      = 0;
 
 % Pressure Gradient Force
-PGF_U             = 4.0*MESH.coefU_x.*hOnU.*(Zip1-Z);
+PGF_U             = 4.0*MESH.coefU_x.*hOnU.*(Zip1+ghs_ip1-Z-ghs);
 PGF_U(:,1  )      = 0;
 PGF_U(:,end)      = 0;
 
-PGF_V_temp        = hOnV.*(ZOnV_jp1-ZOnV);
+PGF_V_temp        = hOnV.*(ZOnV_jp1+ghsOnV_jp1-ZOnV-ghsOnV);
 PGF_V             = PGF_V_temp/(MESH.a*MESH.dtheta);
 
 % Colioris Force

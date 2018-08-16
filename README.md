@@ -86,6 +86,10 @@ College of Earth and Planetary Sciences, UCAS
 Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
 
 # Update log
+V3.3 :
+Add isolated mountain test case.
+Add the topography influence into the equation.
+
 V3.2 :
 
 Fixed a bug in L operator, now the model can run much more better than before.

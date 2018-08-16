@@ -1,4 +1,4 @@
-function [u,v,Z] = Haurwitz(MESH)
+function [u,v,Z,ghs] = Haurwitz(MESH)
 
 MESH.cosLatZ(:,1  ) = 0;
 MESH.cosLatZ(:,end) = 0;
@@ -11,6 +11,7 @@ g     = MESH.g;
 lon_u = MESH.lon_u;
 lon_v = MESH.lon_v;
 lon_z = MESH.lon_z;
+ghs   = zeros(size(lon_z));
 
 % Set Constants
 omega = 7.848*10^-6;
