@@ -23,7 +23,12 @@ K3       = -BF_norm2/BFF;
 eps      = 0.5;
 tau1     = 2.0 - K1 / eps;
 tau2     = K2 + sqrt( K2^2 + eps * tau1 * K3 );
-tau_n    = tau1/tau2;
+
+if BFF == 0
+    tau_n = 0;
+else
+    tau_n = tau1/tau2;
+end
 
 U_np1    = U - LU * tau_n + eps * tau_n.^2 * BU;
 V_np1    = V - LV * tau_n + eps * tau_n.^2 * BV;

@@ -6,7 +6,7 @@ clear
 
 time_start = clock;
 
-% Choose test case from 'RH' or 'IM'
+% Choose test case from 'RH'(Rossby-Haurwitz wave) or 'IM'(Isolated Mountain)
 test_case = 'IM';
 
 % Choose the integral scheme
@@ -14,21 +14,23 @@ test_case = 'IM';
 % 2 for 4th order Runge-Kutta
 % 3 for Predict Correct
 % 4 for leap frog
-IntSch = 3;
+IntSch = 4;
 
 % Define the grid resolution
-MESH.dx = 2.0; % Degree
-MESH.dy = 2.0; % Degree
+MESH.dx = 1.0; % Degree
+MESH.dy = 1.0; % Degree
+ny      = 180/MESH.dy-1;
+MESH.dy = 180/ny;
 
 % Define time(seconds)
-time_step     = 30.0;
-run_time      = 30*24*3600;
+time_step     = 6.0;
+run_time      = 20*24*3600;
 
 % Choose the split parameter
 % split_scheme = 1 for CSP2
 % split_scheme = 0 for no split
 Split.split_scheme = 0;
-Split.split_num    = 8;
+Split.split_num    = 3;
 
 % Define output
 history_interval = 3600;

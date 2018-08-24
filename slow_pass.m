@@ -84,9 +84,9 @@ ADV_V_y = vcos .*(Vjp1-Vjm1) + vVcos_jp1 - vVcos_jm1;
 % Construct L operator
 LU1         = MESH.coefU_x.*ADV_U_x;
 LU2         = MESH.coefU_y.*ADV_U_y;
+LU2(:,1  )  = 0;
+LU2(:,end)  = 0;
 LU          = LU1+LU2;
-LU(:,1  )   = 0;% For southern pole
-LU(:,end)   = 0;% For northern pole
 
 LV1         = MESH.coefV_x.*ADV_V_x;
 LV2         = MESH.coefV_y.*ADV_V_y;

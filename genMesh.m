@@ -10,13 +10,13 @@ MESH.g     = 9.80616;
 
 % Generate C-grid on sphere, z represents the geopotential height
 longitude_z = 0  :dx:360-dx;
-latitude_z  = -90:dx:90;
+latitude_z  = -90:dy:90;
 
 longitude_u = longitude_z + 0.5*dx;
 latitude_u  = latitude_z;
 
 longitude_v = longitude_z;
-latitude_v  = latitude_z(:,1:end-1) + 0.5*dx;
+latitude_v  = latitude_z(:,1:end-1) + 0.5*dy;
 
 [lat_u,lon_u] = meshgrid(latitude_u,longitude_u);
 [lat_v,lon_v] = meshgrid(latitude_v,longitude_v);

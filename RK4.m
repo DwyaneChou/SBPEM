@@ -60,7 +60,11 @@ R2R3       = inner_product(MESH,U_k2,V_k2,Z_k2,U_k3,V_k3,Z_k3);
 R3R4       = inner_product(MESH,U_k3,V_k3,Z_k3,U_k4,V_k4,Z_k4);
 
 beta_n = 1.0/(3.0*phi4_norm2).*(R1R2+R2R3+R3R4);
-tau_n  = beta_n*time_step;
+if phi4_norm2 == 0
+    tau_n  = 0;
+else
+    tau_n  = beta_n*time_step;
+end
 
 U  = U0+tau_n*phi4_U;
 V  = V0+tau_n*phi4_V;

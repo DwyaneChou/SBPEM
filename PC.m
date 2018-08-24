@@ -41,7 +41,12 @@ LF1LF2    = inner_product(MESH,LU1,LV1,LZ1,LU2,LV2,LZ2);
 LF2_norm2 = inner_product(MESH,LU2,LV2,LZ2,LU2,LV2,LZ2);
 
 beta_n = LF1LF2/LF2_norm2;
-tau_n  = beta_n*time_step;
+
+if LF2_norm2 == 0
+    tau_n = 0;
+else
+    tau_n = beta_n*time_step;
+end
 
 U = U0 + tau_n*LU2;
 V = V0 + tau_n*LV2;

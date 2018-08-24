@@ -2,8 +2,7 @@ function [LU,LV,LZ] = fast_pass(STATE,MESH)
 
 Omega = MESH.Omega;
 a     = MESH.a;
-g     = MESH.g;
-hs    = MESH.hs;
+ghs   = MESH.ghs;
 
 U = STATE.U;
 V = STATE.V;
@@ -39,7 +38,6 @@ Zip1(nx_z    ,:)           = Z(1,:);
 ZOnV                       = Z(:,1:ny_v);
 ZOnV_jp1(:,1:ny_v)         = Z(:,2:ny_z);
 
-ghs                        = g*hs;
 ghs_ip1(1:nx_z-1,:)        = ghs(2:nx_z,:);
 ghs_ip1(nx_z    ,:)        = ghs(1,:);
 
@@ -125,4 +123,3 @@ LZ2         = MESH.coefZ_y.*FLUX_Z_y;
 LZ2(:,1  )  = mean(FLUX_Z_y_part1(:,1  ))*MESH.coefZ_y(:,1  );% Southern Pole
 LZ2(:,end)  = mean(FLUX_Z_y_part2(:,end))*MESH.coefZ_y(:,end);% Northern Pole
 LZ          = LZ1+LZ2;
-

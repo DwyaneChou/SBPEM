@@ -86,11 +86,17 @@ College of Earth and Planetary Sciences, UCAS
 Special thanks to my teacher Dong Li @IAP:https://github.com/dongli
 
 # Update log
+V3.4 :
+
+Adjusted meridional grid number to obtain the correct Coriolis force on the equator, by doing this, SBPEM can maintain R-H wave about 100 days.
+
+Fixed the bug in split scheme.
+
 V3.3 :
 
-Add isolated mountain test case.
+Added isolated mountain test case.
 
-Add the topography influence into the equation.
+Added the topography influence into the equation.
 
 V3.2 :
 

@@ -7,7 +7,7 @@ if Split.split_scheme == 1
     
     dt = Split.slow_dt;
     [~,STATE.U,STATE.V,STATE.Z,...
-       TEND.LU,TEND.LV,TEND.LZ] = integrator(slow_pass,MESH,STATE,STATE_old,TEND_old,IntSch,dt);
+               TEND.LU,TEND.LV,TEND.LZ] = integrator(slow_pass,MESH,STATE,STATE_old,TEND_old,IntSch,dt);
     
     for i = 1:Split.split_num
         if IntSch == 4
